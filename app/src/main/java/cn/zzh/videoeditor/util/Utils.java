@@ -18,7 +18,7 @@ import cn.zzh.videoeditor.R;
 public final class Utils {
 
     private static final String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
-    private static final String APP_DIR = SDCARD + "/AVGraphics";
+    private static final String APP_DIR = SDCARD + "/VideoEditor";
 
     @SuppressLint("StaticFieldLeak")
     private static Context sContext = BaseApplication.getContext();

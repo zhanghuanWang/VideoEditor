@@ -6,15 +6,14 @@
     android:layout_height="match_parent"
     tools:context="cn.zzh.videoeditor.activity.HomeActivity">
 
-
     <ImageView
         android:id="@+id/home_iv_editor"
         android:layout_width="0dp"
-        android:layout_height="@dimen/image_height_normal"
+        android:layout_height="@dimen/image_normal_size"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/img_editor"
+        android:background="@drawable/img_editor_selector"
         android:contentDescription="@string/home_iv_recorder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,10 +22,10 @@
     <ImageView
         android:id="@+id/home_iv_recorder"
         android:layout_width="0dp"
-        android:layout_height="@dimen/image_height_normal"
+        android:layout_height="@dimen/image_normal_size"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/img_recorder"
+        android:background="@drawable/img_recorder_selector"
         android:contentDescription="@string/home_iv_recorder"
         app:layout_constraintEnd_toStartOf="@+id/home_iv_player"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -36,11 +35,11 @@
     <ImageView
         android:id="@+id/home_iv_player"
         android:layout_width="0dp"
-        android:layout_height="@dimen/image_height_normal"
+        android:layout_height="@dimen/image_normal_size"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/img_player"
+        android:background="@drawable/img_player_selector"
         android:contentDescription="@string/home_iv_player"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

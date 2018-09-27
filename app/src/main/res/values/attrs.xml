@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <declare-styleable name="CameraView">
+        <attr name="focus_width" format="dimension"/>
+        <attr name="focus_height" format="dimension"/>
+        <attr name="indicator_width" format="dimension"/>
+        <attr name="indicator_height" format="dimension"/>
+        <attr name="beauty_on_front" format="boolean"/>
+        <attr name="facing" format="enum">
+            <enum name="back" value="0"/>
+            <enum name="front" value="1"/>
+        </attr>
+    </declare-styleable>
+
+</resources>

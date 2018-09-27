@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cn.zzh.videoeditor.activity.RecordActivity">
+
+    <cn.zzh.videoeditor.view.CameraView
+        android:id="@+id/record_cv_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:beauty_on_front="true"
+        app:focus_height="@dimen/image_normal_size"
+        app:focus_width="@dimen/image_normal_size"
+        app:indicator_height="@dimen/image_normal_size"
+        app:indicator_width="@dimen/image_normal_size" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/margin_normal"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/record_btn_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/record_btn_record" />
+
+        <Button
+            android:id="@+id/record_btn_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/record_btn_switch" />
+    </LinearLayout>
+
+</FrameLayout>
