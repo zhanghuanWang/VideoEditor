@@ -61,6 +61,7 @@ public class CameraView extends FrameLayout {
     private PreviewCallback mPreviewCallback;
     public float mAspectRatio = ASPECT_RATIO_ARRAY[0];
 
+    private boolean mIsStarted = false;
     private boolean mIsBeautyOpen = false;
     private boolean mIsBeautyOnFront = false;
     private float mBeautyLevel = MIN_BEAUTY;
@@ -119,13 +120,7 @@ public class CameraView extends FrameLayout {
         mIvFocus.setImageResource(R.drawable.img_focus);
         mIvIndicator = new ImageView(context);
         mIvIndicator.setImageResource(R.drawable.img_eye);
-
-        addView(mIvFocus, new LayoutParams(mFocusWidth, mFocusHeight, Gravity.CENTER));
-        addView(mIvIndicator, new LayoutParams(mIndicatorWidth, mIndicatorHeight, Gravity.CENTER));
-
         mSurfaceView = new CameraSurfaceView(context);
-        addView(mSurfaceView, 0, new LayoutParams(LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     public void setPreviewCallback(PreviewCallback previewCallback) {
@@ -193,6 +188,18 @@ public class CameraView extends FrameLayout {
         mSurfaceView = new CameraSurfaceView(getContext());
         addView(mSurfaceView, 0, new LayoutParams(LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    public void start() {
+        if (mIsStarted) {
+            Log.w(TAG, "CameraView is started");
+            return;
+        }
+        mIsStarted = true;
+        addView(mSurfaceView, 0, new LayoutParams(LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        addView(mIvIndicator, new LayoutParams(mIndicatorWidth, mIndicatorHeight, Gravity.CENTER));
+        addView(mIvFocus, new LayoutParams(mFocusWidth, mFocusHeight, Gravity.CENTER));
     }
 
     public void release() {

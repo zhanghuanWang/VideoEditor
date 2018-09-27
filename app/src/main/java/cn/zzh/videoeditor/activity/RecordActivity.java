@@ -1,31 +1,25 @@
 package cn.zzh.videoeditor.activity;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.hardware.Camera;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 
 import cn.zzh.videoeditor.BaseActivity;
-import cn.zzh.videoeditor.BaseApplication;
 import cn.zzh.videoeditor.R;
-import cn.zzh.videoeditor.util.CameraHelper;
-import cn.zzh.videoeditor.util.ToastHelper;
+import cn.zzh.videoeditor.view.CameraView;
 
 public class RecordActivity extends BaseActivity {
 
-    private static final int RC_PERMISSION = 1;
+    private CameraView mCameraView;
+    private LinearLayout mLlControlBar;
+    private SeekBar mSbBeauty;
+    private SeekBar mSbSaturate;
+    private SeekBar mSbBright;
+    private Button mBtnSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,74 +28,62 @@ public class RecordActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_record);
+        init();
+    }
+
+    private void init() {
+        findViews();
+        setListener();
+        mCameraView.start();
+    }
+
+    private void findViews() {
+        mLlControlBar = findViewById(R.id.record_ll_control_bar);
+        mCameraView = findViewById(R.id.record_cv_preview);
+        mSbBeauty = findViewById(R.id.record_sb_beauty);
+        mSbSaturate = findViewById(R.id.record_sb_saturate);
+        mSbBright = findViewById(R.id.record_sb_bright);
+        mBtnSwitch = findViewById(R.id.record_btn_switch);
+    }
+
+    private void setListener() {
+        mSbBeauty.setOnSeekBarChangeListener((DefaultSeekBarChangeListener) progress ->
+                mCameraView.setBeautyLevel(progress));
+        mSbSaturate.setOnSeekBarChangeListener((DefaultSeekBarChangeListener) progress ->
+                mCameraView.setSaturateLevel(progress));
+        mSbBright.setOnSeekBarChangeListener((DefaultSeekBarChangeListener) progress ->
+                mCameraView.setBrightLevel(progress));
+
+        mBtnSwitch.setOnClickListener(v -> {
+            mCameraView.switchCamera();
+            mLlControlBar.setVisibility(mCameraView.isFacingBack() ? View.GONE : View.VISIBLE);
+        });
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        requestPermissions();
+    protected void onPause() {
+        super.onPause();
+        mCameraView.release();
     }
 
-    private void requestPermissions() {
-        String[] permissions = {
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.MODIFY_AUDIO_SETTINGS,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-        };
-        List<String> list = new ArrayList<>();
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(BaseApplication.getContext(), permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                list.add(permission);
-            }
-        }
-        String[] requestList = new String[list.size()];
-        for (int i = 0; i < list.size(); ++i) {
-            requestList[i] = list.get(i);
-        }
-        if (requestList.length > 0) {
-            ActivityCompat.requestPermissions(this, requestList, RC_PERMISSION);
-        } else {
-            fakeCamera();
-            fakeAudioRecord();
-        }
-    }
+    private interface DefaultSeekBarChangeListener extends SeekBar.OnSeekBarChangeListener {
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        for (int result : grantResults) {
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                ToastHelper.show(R.string.msg_no_permission);
-                finish();
-            }
-        }
-        fakeCamera();
-        fakeAudioRecord();
-    }
+        void onProgressChanged(float progress);
 
-    // 创造一个假的摄像机和音频录制，以在第一时间申请权限
-    private void fakeCamera() {
-        Camera camera = CameraHelper.openCamera();
-        camera.stopPreview();
-        camera.release();
-    }
-
-    private void fakeAudioRecord() {
-        int bufferSize = AudioRecord.getMinBufferSize(16000,
-                AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, 16000,
-                AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
-        if (audioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
-            Log.e(TAG, "fakeAudioRecord init AudioRecord failed");
-            return;
+        @Override
+        default void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            onProgressChanged(1.0f * progress / 100);
         }
-        audioRecord.startRecording();
-        audioRecord.stop();
-        audioRecord.release();
+
+        @Override
+        default void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        default void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
     }
 
     static {

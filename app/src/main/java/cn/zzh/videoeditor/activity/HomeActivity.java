@@ -1,15 +1,26 @@
 package cn.zzh.videoeditor.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.zzh.videoeditor.BaseActivity;
 import cn.zzh.videoeditor.R;
+import cn.zzh.videoeditor.util.ToastHelper;
 import cn.zzh.videoeditor.util.Utils;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
+
+    private static final int RC_PERMISSION = 1;
 
     private ImageView mIvEditor;
     private ImageView mIvRecorder;
@@ -26,6 +37,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         findViews();
         layoutViews();
         setListener();
+        requestPermissions();
     }
 
     private void findViews() {
@@ -55,6 +67,44 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     private void setListener() {
         mIvRecorder.setOnClickListener(this);
+    }
+
+    private void requestPermissions() {
+        String[] permissions = {
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        };
+        List<String> list = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                list.add(permission);
+            }
+        }
+        String[] requestArrays = new String[list.size()];
+        for (int i = 0; i < list.size(); ++i) {
+            requestArrays[i] = list.get(i);
+        }
+        if (requestArrays.length > 0) {
+            ActivityCompat.requestPermissions(this, permissions, RC_PERMISSION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean granted = true;
+        for (int grantResult : grantResults) {
+            if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                granted = false;
+            }
+        }
+        if (!granted) {
+            ToastHelper.show(R.string.msg_no_permission);
+        }
     }
 
     @Override

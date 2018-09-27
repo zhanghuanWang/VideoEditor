@@ -3,7 +3,7 @@
 
     <!-- Applicaiton common -->
     <string name="msg_create_folder_error">文件夹创建过程中出现错误</string>
-    <string name="msg_no_permission">权限不足，无法运行</string>
+    <string name="msg_no_permission">权限不足，可能无法正常运行</string>
 
     <!-- HomeActivity(home) -->
     <string name="home_iv_editor">Editor</string>
@@ -13,6 +13,9 @@
     <!-- RecordActivity(record) -->
     <string name="record_btn_record">开始录制</string>
     <string name="record_btn_switch">切换相机</string>
+    <string name="record_tv_beauty">磨皮</string>
+    <string name="record_tv_saturate">红润</string>
+    <string name="record_tv_bright">美白</string>
 
 
 </resources>
