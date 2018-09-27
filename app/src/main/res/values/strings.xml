@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">VideoEditor</string>
+
+    <string name="msg_create_folder_error">文件夹创建过程中出现错误</string>
+
+    <string name="home_iv_editor">Editor</string>
+    <string name="home_iv_player">Player</string>
+    <string name="home_iv_recorder">Recorder</string>
+
+
 </resources>
